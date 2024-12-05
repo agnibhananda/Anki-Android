@@ -115,6 +115,35 @@ class ReviewerFragmentTest : InstrumentedTest() {
         ensureAnswerButtonsAreDisplayed()
     }
 
+    @Test
+    fun testDefaultLegacyValueForApkg() {
+    selectExportType(ExportType.DECK)
+    onView(withId(R.id.checkbox_legacy))
+        .check(matches(isNotChecked()))
+    onView(withId(R.id.export_button)).perform(click())
+    verify(collection).exportAnkiPackage(
+        outPath = anyString(),
+        withScheduling = anyBoolean(),
+        withDeckConfigs = anyBoolean(),
+        withMedia = anyBoolean(),
+        limit = any(),
+        legacy = eq(false) 
+    )
+    @Test
+    fun testDefaultLegacyValueForColpkg() {
+    selectExportType(ExportType.COLLECTION)
+    onView(withId(R.id.checkbox_legacy))
+        .check(matches(isNotChecked()))
+    onView(withId(R.id.export_button)).perform(click())
+    verify(collection).exportCollectionPackage(
+        outPath = anyString(),
+        includeMedia = anyBoolean(),
+        legacy = eq(false)
+    )
+}
+
+}
+
     private fun clickShowAnswerAndAnswerGood() {
         clickShowAnswer()
         ensureAnswerButtonsAreDisplayed()
